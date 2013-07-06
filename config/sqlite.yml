@@ -1,0 +1,20 @@
+Default: &defaults
+  database: Phlyd.sqlite3
+  poolsize: 10
+
+Development:
+  <<: *defaults
+
+Testing:
+  database: Phlyd_test.sqlite3
+  <<: *defaults
+
+Staging:
+  database: Phlyd_staging.sqlite3
+  poolsize: 100
+  <<: *defaults
+
+Production:
+  database: Phlyd_production.sqlite3
+  poolsize: 100
+  <<: *defaults
