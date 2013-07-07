@@ -1,0 +1,17 @@
+
+graph ER {
+	node [shape=box]; topic; issue; proposal; user;
+//	node [shape=ellipse]; {node [label="name"] name0; name1; name2;} code; grade; number;
+	node [shape=diamond,style=filled,color=lightgrey];  belong; address; propose; ranks; delegate; include;
+
+domain -- belong -- issue;
+proposal -- address -- issue;
+user -- propose -- proposal;
+user -- ranks -- proposal;
+user -- delegate -- user; delegate -- domain;
+domain -- includes -- domain;
+
+}
+
+
+

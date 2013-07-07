@@ -16,10 +16,12 @@ library
                      Foundation
                      Import
                      Model
+                     Types
                      Settings
                      Settings.StaticFiles
                      Settings.Development
                      Handler.Home
+                     Handler.Domains
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT
@@ -70,6 +72,8 @@ library
                  , conduit                       >= 1.0
                  , monad-logger                  >= 0.3
                  , fast-logger                   >= 0.3
+                 , time >= 1.2
+                 , containers >= 0.3
 
 executable         Phlyd
     if flag(library-only)

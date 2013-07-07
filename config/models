@@ -1,12 +1,58 @@
 User
     ident Text
     password Text Maybe
+    permissions UserPermissions
     UniqueUser ident
     deriving Typeable
+
 Email
     email Text
     user UserId Maybe
     verkey Text Maybe
     UniqueEmail email
+
+Domain
+        name Text
+        description Textarea
+        parent DomainId Maybe
+        UniqueDomainName name
+        
+Issue
+        status IssueStatus
+        name Text
+        description Textarea
+        domain DomainId
+        author UserId
+        publicly Bool
+        created UTCTime
+        upForVote UTCTime
+        closed UTCTime
+        
+Proposal
+        status ProposalStatus
+        name Text
+        description Textarea
+        addresses IssueId
+        author UserId
+        publicly Bool
+        UniqueProposalName addresses name
+        
+Argument
+        content Textarea
+        pro Bool
+        author UserId
+        publicly Bool
+        
+Delegate
+        source UserId
+        target UserId
+        domain DomainId
+        publicly Bool
+
+Vote 
+     user UserId
+     proposal ProposalId
+     publicly Bool
+     rank Int
 
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)
