@@ -40,16 +40,20 @@ postDomainsR = postDomainR' Nothing
 
 getDomainR :: DomainId -> Handler Html
 getDomainR domainId = do
-  Domain name desc parent <- runDB $ get404 domainId
+  (Domain name desc parent,doms) <- runDB $ do
+    d@(Domain name desc parent) <- get404 domainId
+    doms <- drawForest <$> treeToString <$> flip forestFrom (Just domainId) <$> selectList [] []
+    return (d,doms)
   (form, _) <- generateFormPost $ newDomainForm (Just domainId)
-  doms <- drawForest <$> treeToString <$> flip forestFrom (Just domainId) <$> runDB (selectList [] [])
   muser <- maybeAuth
   defaultLayout $ [whamlet|
     <html>
       <head>
         <title>Domain #{name}
       <body>
-        <title>H1 Domain: #{name}
+        <h1> #{name} Domain
+        <p>
+          #{desc}
         Subdomains:
         <pre>
           #{doms}
@@ -58,16 +62,19 @@ getDomainR domainId = do
              ^{form}
              <div>
                <input type=submit>
-    |]  
+    |]
+
+postDomainR :: DomainId -> Handler Html
+postDomainR d = postDomainR' (Just d)  
 
 postDomainR' :: Maybe DomainId -> Handler Html
 postDomainR' domainId = do
-    ((res, form), _) <- runFormPost $ newDomainForm domainId
+    ((res, form), _) <- runFormPost $ newDomainForm domainId 
     case res of
         FormSuccess d -> do
             domId <- runDB $ insert d
             setMessage "Domain added"
-            redirect DomainsR
+            redirect (DomainR domId)
         _ -> defaultLayout [whamlet|
 <form method=post>
     ^{form}

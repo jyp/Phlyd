@@ -47,6 +47,7 @@ Delegate
         source UserId
         target UserId
         domain DomainId
+        proportion Int
         publicly Bool
 
 Vote 
