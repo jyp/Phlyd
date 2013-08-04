@@ -31,6 +31,7 @@ treeFrom doms d = Node d (doms `forestFrom` (Just $ entityKey d))
 mkForest :: [Dom] -> Forest Dom
 mkForest doms = forestFrom doms Nothing
 
-  
+isAdminUser :: User -> Bool
+isAdminUser = (Administrator ==) . userPermissions
   
 

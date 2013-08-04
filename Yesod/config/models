@@ -2,6 +2,7 @@ User
     ident Text
     password Text Maybe
     permissions UserPermissions
+    name Text
     UniqueUser ident
     deriving Typeable
 

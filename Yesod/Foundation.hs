@@ -20,6 +20,7 @@ import Types
 import Text.Jasmine (minifym)
 import Text.Hamlet (hamletFile)
 import System.Log.FastLogger (Logger)
+import Control.Applicative
 
 -- | The site argument for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -127,7 +128,7 @@ instance YesodPersist App where
 instance YesodPersistRunner App where
     getDBRunner = defaultGetDBRunner connPool
 
-instance YesodAuth App where
+instance YesodAuth                    App where
     type AuthId App = UserId
 
     -- Where to send a user after successful login
@@ -139,8 +140,8 @@ instance YesodAuth App where
         x <- getBy $ UniqueUser $ credsIdent creds
         case x of
             Just (Entity uid _) -> return $ Just uid
-            Nothing -> do
-                fmap Just $ insert $ User (credsIdent creds) Nothing RegularUser
+            Nothing -> Just <$> (insert $ User (credsIdent creds) Nothing userLevel "No name")
+              where userLevel = Administrator -- RegularUser
 
     -- You can add other plugins like BrowserID, email or OAuth here
     authPlugins _ = [authBrowserId def, authGoogleEmail]

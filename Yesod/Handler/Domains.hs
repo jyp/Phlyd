@@ -3,70 +3,73 @@ module Handler.Domains where
 
 import Yesod.Auth
 import Data.Tree
-import Data.Text (unpack)
+import Data.Text (unpack,pack)
 import Import
+import qualified Text.Blaze.Html5 as H
 
-treeToString :: Forest Dom -> Forest String
-treeToString = fmap (fmap ((unpack . domainName . entityVal)))
+getDomainsR :: Handler Html
+getDomainsR = getDomainR' Nothing
+
+postDomainsR :: Handler Html
+postDomainsR = postDomainR' Nothing
+
+getDomainR :: DomainId -> Handler Html
+getDomainR = getDomainR' . Just
+
+postDomainR :: DomainId -> Handler Html
+postDomainR d = postDomainR' (Just d)  
+
+domToDesc render d = case entityVal d of 
+  (Domain name desc _parent) -> [
+    [hamlet| <a href=@{DomainR (entityKey d)}>#{name} |] render
+   ]
+
+forestTable :: Forest [Html] -> Html
+forestTable = H.table . forestTable' ""
+
+forestTable' :: String -> Forest [Html] -> Html
+forestTable' padding rows = 
+  forM_ (zip [1..] rows) $ 
+    \(n,Node (col0:cols) subrows) -> H.tr $ do
+       let pad = show n ++ "." ++ padding
+       H.td $ do toHtml pad
+                 col0
+       forM cols H.td 
+       forestTable' pad subrows
 
 newDomainForm parent = renderDivs $ Domain
    <$> areq textField "Name" Nothing
    <*> areq textareaField "Description" Nothing
    <*> pure parent
 
-getDomainsR :: Handler Html
-getDomainsR = do
-    muser <- maybeAuth
-    doms <- drawForest <$> treeToString <$> mkForest <$> runDB (selectList [] [])
-
-    (form, _) <- generateFormPost $ newDomainForm Nothing
-    defaultLayout $ [whamlet|
-    $doctype 5
-    <html>
-      <head>
-        <title>Domains
-      <body>
-        <pre>
-          #{doms}
-        <h2> Add top-level domain
-          <form method=post>
-             ^{form}
-             <div>
-               <input type=submit>
-    |]
-
-postDomainsR :: Handler Html
-postDomainsR = postDomainR' Nothing
-
-getDomainR :: DomainId -> Handler Html
-getDomainR domainId = do
-  (Domain name desc parent,doms) <- runDB $ do
-    d@(Domain name desc parent) <- get404 domainId
-    doms <- drawForest <$> treeToString <$> flip forestFrom (Just domainId) <$> selectList [] []
+getDomainR' :: Maybe DomainId -> Handler Html
+getDomainR' mDomainId = do
+  user <- requireAuth
+  (mDomain,doms) <- runDB $ do
+    d <- mapM get404 mDomainId
+    doms <- flip forestFrom mDomainId <$> selectList [] []
     return (d,doms)
-  (form, _) <- generateFormPost $ newDomainForm (Just domainId)
-  muser <- maybeAuth
-  defaultLayout $ [whamlet|
+  (form, _) <- generateFormPost $ newDomainForm mDomainId
+  let (name,desc) = case mDomain of 
+                           Just (Domain name desc _) -> (name,desc)
+                           Nothing -> ("TOP LEVEL",Textarea "")
+  render <- getUrlRenderParams
+  defaultLayout [whamlet|
     <html>
       <head>
-        <title>Domain #{name}
+        <title> #{name} Domain
       <body>
         <h1> #{name} Domain
-        <p>
-          #{desc}
-        Subdomains:
-        <pre>
-          #{doms}
+        <p> #{desc}
+        <p> Subdomains:
+        #{forestTable $ fmap (fmap (domToDesc render)) doms}
         <h2> Add direct subdomain
           <form method=post>
              ^{form}
              <div>
                <input type=submit>
     |]
-
-postDomainR :: DomainId -> Handler Html
-postDomainR d = postDomainR' (Just d)  
-
+    
 postDomainR' :: Maybe DomainId -> Handler Html
 postDomainR' domainId = do
     ((res, form), _) <- runFormPost $ newDomainForm domainId 

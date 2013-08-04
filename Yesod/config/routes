@@ -8,3 +8,4 @@
 /domain/#DomainId DomainR GET POST
 / HomeR GET POST
 
+/user/#UserId UserR GET
