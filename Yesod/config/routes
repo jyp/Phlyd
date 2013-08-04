@@ -4,8 +4,12 @@
 /favicon.ico FaviconR GET
 /robots.txt RobotsR GET
 
-/domains DomainsR GET POST
-/domain/#DomainId DomainR GET POST
 / HomeR GET POST
 
+/domains DomainsR GET POST
+/domain/#DomainId DomainR GET POST
+
 /user/#UserId UserR GET
+
+/delegation DelegateR POST
+

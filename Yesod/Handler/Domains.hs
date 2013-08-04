@@ -42,13 +42,23 @@ newDomainForm parent = renderDivs $ Domain
    <*> areq textareaField "Description" Nothing
    <*> pure parent
 
+{-
+newDelegForm dom from = renderDivs $ Delegation from 
+   <$> areq textField "Delegate" Nothing
+   <*> pure dom
+   <$> areq intField "Proportion" (Just 10)
+   <*> areq boolField "Make this delegation publicly visible" Nothing
+   <*> pure parent
+-}
+
 getDomainR' :: Maybe DomainId -> Handler Html
 getDomainR' mDomainId = do
   user <- requireAuth
-  (mDomain,doms) <- runDB $ do
+  (mDomain,doms,delegs) <- runDB $ do
     d <- mapM get404 mDomainId
     doms <- flip forestFrom mDomainId <$> selectList [] []
-    return (d,doms)
+    delegs <- selectList [DelegateSource ==. entityKey user] []
+    return (d,doms,delegs)
   (form, _) <- generateFormPost $ newDomainForm mDomainId
   let (name,desc) = case mDomain of 
                            Just (Domain name desc _) -> (name,desc)
@@ -63,6 +73,7 @@ getDomainR' mDomainId = do
         <p> #{desc}
         <p> Subdomains:
         #{forestTable $ fmap (fmap (domToDesc render)) doms}
+
         <h2> Add direct subdomain
           <form method=post>
              ^{form}
@@ -79,11 +90,11 @@ postDomainR' domainId = do
             setMessage "Domain added"
             redirect (DomainR domId)
         _ -> defaultLayout [whamlet|
-<form method=post>
-    ^{form}
-    <div>
-        <input type=submit>
-|]
+             <form method=post>
+                 ^{form}
+                 <div>
+                     <input type=submit>
+             |]
  
    
 

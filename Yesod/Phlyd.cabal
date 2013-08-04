@@ -23,6 +23,7 @@ library
                      Handler.Home
                      Handler.Domains
                      Handler.User
+                     Handler.Delegs
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT
