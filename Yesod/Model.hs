@@ -8,7 +8,6 @@ import Data.Typeable (Typeable)
 import Data.Time (UTCTime)
 import Types
 import Data.Tree
-import Control.Applicative
 
 -- You can define all of your database entities in the entities file.
 -- You can find more information on persistent and how to declare entities
@@ -17,6 +16,7 @@ import Control.Applicative
 share [mkPersist sqlOnlySettings, mkMigrate "migrateAll"]
     $(persistFileWith lowerCaseSettings "config/models")
 
+-- Domains
 type Dom = Entity Domain
 
 childrenOf :: [Dom] -> Maybe DomainId -> [Dom]
@@ -31,6 +31,7 @@ treeFrom doms d = Node d (doms `forestFrom` (Just $ entityKey d))
 mkForest :: [Dom] -> Forest Dom
 mkForest doms = forestFrom doms Nothing
 
+-- Users
 isAdminUser :: User -> Bool
 isAdminUser = (Administrator ==) . userPermissions
   
