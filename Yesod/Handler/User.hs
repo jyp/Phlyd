@@ -13,30 +13,37 @@ getUserR userId = do
   ((_, form), _) <- runFormPost $ newDelegForm (entityKey user) (Just userId) Nothing
   ds <- runDB $ do
      ds <- selectList [DelegateSource ==. userId, DelegatePublicly ==. True] []
-     forM ds $ \(Delegate _source target dom amount _pub) -> 
+     forM (map entityVal ds) $ \(Delegate _source target dom amount _pub) -> do
        targetName <- maybe "<NO USER>" userName <$> get target
        domName <- maybe "<NO DOM>" domainName <$> get dom
        return (target,targetName,dom,domName,amount)
   defaultLayout [whamlet|
     <html>
       <head>
-        <title>User #{ident}
+        <title>User #{name}
       <body>
         <h1> #{name} 
         <ul>
-          <li> permissions = #{show(perm)}
-          <li> identifier = #{ident}
-          <li> name = #{name}
-        <h2> Public delegations of this user
-          <ul>
-            $forall (f,(target,targetName,dom,domName,amount)) <- ds
-              <li> In <a href=@{DomainR dom}>#{domName}
-                   To <a href=@{UserR target}>#{targetName} 
-                   By #{amount}
-        <h2> Delegations from you to this user
-        <h2> Public delegations to this user
-        <h2> Add delegation (from you) to this user
-          <form method=post action=@{DelegateR} >
+          <li> permissions = #{show perm}
+
+        <h3> Public delegations of this user
+
+        <ul>
+            $forall (target,targetName,dom,domName,amount) <- ds
+              <li> in domain 
+                   <a href=@{DomainR dom}> #{domName} 
+                   to 
+                   <a href=@{UserR target}> #{targetName} 
+                   by #{amount}
+
+        <h3> Public delegations to this user
+        TODO
+
+        <h3> Delegations from you to this user
+        TODO
+
+        <h3> Add delegation (from you) to this user
+        <form method=post action=@{DelegateR} >
              ^{form}
              <div>
                <input type=submit>           
