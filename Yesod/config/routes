@@ -6,10 +6,11 @@
 
 / HomeR GET POST
 
-/domains DomainsR GET POST
+new/domain DomainsR GET POST
 /domain/#DomainId DomainR GET POST
 
 /user/#UserId UserR GET
 
-/delegation DelegateR POST
+new/delegate NewDelegateR POST
+/delegate/#DelegateId DelegateR GET POST
 

@@ -10,7 +10,7 @@ getUserR :: UserId -> Handler Html
 getUserR userId = do
   user <- requireAuth
   User ident pass perm name <- runDB $ get404 userId
-  ((_, form), _) <- runFormPost $ newDelegForm (entityKey user) (Just userId) Nothing
+  ((_, form), _) <- runFormPost $ newDelegForm (entityKey user) (Just userId) Nothing Nothing Nothing
   ds <- runDB $ do
      ds <- selectList [DelegateSource ==. userId, DelegatePublicly ==. True] []
      forM (map entityVal ds) $ \(Delegate _source target dom amount _pub) -> do
@@ -43,7 +43,7 @@ getUserR userId = do
         TODO
 
         <h3> Add delegation (from you) to this user
-        <form method=post action=@{DelegateR} >
+        <form method=post action=@{NewDelegateR} >
              ^{form}
              <div>
                <input type=submit>           

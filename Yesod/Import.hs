@@ -7,6 +7,7 @@ import           Prelude              as Import hiding (head, init, last,
 import           Yesod                as Import hiding (Route (..))
 
 import           Control.Applicative  as Import (pure, (<$>), (<*>))
+import           Control.Monad        as Import (when)
 import           Data.Traversable     as Import (forM, mapM)
 import           Data.Foldable        as Import (forM_, mapM_)
 import           Data.Text            as Import (Text)
