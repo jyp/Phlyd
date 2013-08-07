@@ -19,12 +19,12 @@ Domain
         UniqueDomainName name
         
 Issue
-        status IssueStatus
         name Text
-        description Textarea
-        domain DomainId
         author UserId
+        status IssueStatus
+        domain DomainId
         publicly Bool
+        description Textarea
         created UTCTime
         upForVote UTCTime
         closed UTCTime

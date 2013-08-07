@@ -21,9 +21,11 @@ library
                      Settings.StaticFiles
                      Settings.Development
                      Handler.Home
+                     Handler.Helpers
                      Handler.Domains
                      Handler.User
                      Handler.Delegs
+                     Handler.Issue
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT

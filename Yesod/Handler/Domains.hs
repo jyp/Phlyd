@@ -37,19 +37,11 @@ forestTable' padding rows =
        forM cols H.td 
        forestTable' pad subrows
 
+newDomainForm :: Maybe DomainId -> Form Domain
 newDomainForm parent = renderDivs $ Domain
    <$> areq textField "Name" Nothing
    <*> areq textareaField "Description" Nothing
    <*> pure parent
-
-{-
-newDelegForm dom from = renderDivs $ Delegation from 
-   <$> areq textField "Delegate" Nothing
-   <*> pure dom
-   <$> areq intField "Proportion" (Just 10)
-   <*> areq boolField "Make this delegation publicly visible" Nothing
-   <*> pure parent
--}
 
 getDomainR' :: Maybe DomainId -> Handler Html
 getDomainR' mDomainId = do

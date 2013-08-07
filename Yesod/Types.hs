@@ -7,7 +7,7 @@ data UserPermissions = Administrator | RegularUser
      deriving (Show, Read, Eq)
 derivePersistField "UserPermissions"
 
-data IssueStatus = Initiated | VoteOngoing | Closed
+data IssueStatus = Draft | VoteOngoing | Closed
      deriving (Show, Read, Eq)
 derivePersistField "IssueStatus"
 data ProposalStatus = Enabled | Disabled | Accepted 
