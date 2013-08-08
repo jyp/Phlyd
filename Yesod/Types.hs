@@ -10,7 +10,4 @@ derivePersistField "UserPermissions"
 data IssueStatus = Draft | Frozen | VoteOngoing | Closed
      deriving (Show, Read, Eq, Ord)
 derivePersistField "IssueStatus"
-data ProposalStatus = Enabled | Disabled | Accepted 
-     deriving (Show, Read, Eq)
-derivePersistField "ProposalStatus"
 

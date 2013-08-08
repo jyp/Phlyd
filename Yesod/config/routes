@@ -16,3 +16,7 @@ new/delegation NewDelegateR POST
 
 new/issue NewIssueR GET POST
 /issue/#IssueId IssueR GET POST
+
+/new/proposal/#IssueId NewProposalR POST
+/proposal/#ProposalId ProposalR GET POST
+

@@ -6,6 +6,16 @@ import Data.Text (unpack)
 import Import
 import Handler.Delegs
 
+{-
+userForm = renderDivs $ User 
+
+postUserR :: UserId -> Handler Html
+postUserR = postEntryR UserR $ \userId -> 
+  authId <- entityKey <$> requireAuth
+  when (authId /= userId) $ permissionDenied "Can't update another user data"
+--  User ident pass perm name <- runDB $ get404 userId
+  -}
+
 getUserR :: UserId -> Handler Html
 getUserR userId = do
   user <- requireAuth

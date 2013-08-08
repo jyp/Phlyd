@@ -30,12 +30,11 @@ Issue
         closed UTCTime
         
 Proposal
-        status ProposalStatus
         name Text
-        description Textarea
-        addresses IssueId
         author UserId
+        addresses IssueId
         publicly Bool
+        description Textarea
         UniqueProposal addresses name
                 
 Argument
