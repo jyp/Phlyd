@@ -79,6 +79,7 @@ library
                  , time >= 1.2
                  , containers >= 0.3  
                  , blaze-html >= 0.5
+                 , blaze-markup >= 0.5
 
 executable         Phlyd
     if flag(library-only)

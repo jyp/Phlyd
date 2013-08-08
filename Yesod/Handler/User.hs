@@ -10,7 +10,7 @@ getUserR :: UserId -> Handler Html
 getUserR userId = do
   user <- requireAuth
   User ident pass perm name <- runDB $ get404 userId
-  ((_, form), _) <- runFormPost $ delegForm (entityKey user) (Just userId) Nothing Nothing Nothing
+  (form,_) <- generateFormPost $ delegForm (entityKey user) (Just userId) Nothing Nothing Nothing
   ds <- runDB $ do
      ds <- selectList [DelegateSource ==. userId, DelegatePublicly ==. True] []
      forM (map entityVal ds) $ \(Delegate _source target dom amount _pub) -> do

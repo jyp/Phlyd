@@ -5,6 +5,7 @@ module Import
 import           Prelude              as Import hiding (head, init, last,
                                                  readFile, tail, writeFile, mapM, mapM_)
 import           Yesod                as Import hiding (Route (..))
+import           Yesod.Auth           as Import (requireAuth,requireAuthId)
 
 import           Control.Applicative  as Import (pure, (<$>), (<*>))
 import           Control.Monad        as Import (when)

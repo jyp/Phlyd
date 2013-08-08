@@ -15,3 +15,4 @@ new/delegation NewDelegateR POST
 /delegation/#DelegateId DelegateR GET POST
 
 new/issue NewIssueR GET POST
+/issue/#IssueId IssueR GET POST
