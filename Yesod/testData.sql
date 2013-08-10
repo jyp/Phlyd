@@ -8,5 +8,7 @@ insert into User values (4,'tester3@example.com', '', 'RegularUser', 'Jean Bricm
 
 INSERT INTO Issue VALUES(1,'Participation',1,'Draft',1,1,'Lack of participation in ...','2013-08-08 18:26:07.111782 UTC','1858-11-17 00:00:00 UTC','1858-11-17 00:00:00 UTC');
 
+INSERT INTO Proposal VALUES(1,'Phlyd',1,1,1,'go go go');
+
 
 

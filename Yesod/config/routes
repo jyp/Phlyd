@@ -6,17 +6,18 @@
 
 / HomeR GET POST
 
-new/domain DomainsR GET POST
+/new/domain DomainsR GET POST
 /domain/#DomainId DomainR GET POST
 
 /user/#UserId UserR GET
 
-new/delegation NewDelegateR POST
+/new/delegation NewDelegateR POST
 /delegation/#DelegateId DelegateR GET POST
 
-new/issue NewIssueR GET POST
+/new/issue NewIssueR GET POST
 /issue/#IssueId IssueR GET POST
 
 /new/proposal/#IssueId NewProposalR POST
 /proposal/#ProposalId ProposalR GET POST
 
+/vote/#VoteId VoteR 

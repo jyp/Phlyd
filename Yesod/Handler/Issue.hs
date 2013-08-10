@@ -5,6 +5,7 @@ import Handler.Helpers
 import Types
 import Data.Time.Clock
 import Yesod.Auth
+import Handler.Proposal
 
 issueForm name author domain publicly description created = renderDivs $ Issue
     <$> areq textField "Name" name
@@ -43,6 +44,7 @@ getIssueR issueId = do
   proposals <- runDB $ selectList [ProposalAddresses ==. issueId] []
     
   (form,_) <- generateFormPost $ issueForm (Just name) userId (Just domainId) (Just publicly) (Just description) now
+  (proposalForm,_) <- generateFormPost $ proposalForm Nothing userId issueId Nothing Nothing
   let showAuthor = publicly || authorId == userId
       canUpdate = status == Draft && authorId == userId
       frozen = status >= Frozen
@@ -68,7 +70,13 @@ getIssueR issueId = do
            <h2> Proposals
            <ul>
               $forall p <- proposals 
-                <li> <a href=@{ProposalR $ entityKey p}> #{proposalName $ entityVal $ p}
+                <li> 
+                  <a href=@{ProposalR $ entityKey p}> #{proposalName $ entityVal $ p}
+           <h2> Add proposal
+              <form method=post action=@{NewProposalR issueId}>
+                 ^{proposalForm}
+               <div>
+                 <input type=submit>               
            $if canUpdate
              <h2> Update Issue
                <form method=post>

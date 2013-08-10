@@ -11,7 +11,7 @@ proposalForm name author addresses publicly description = renderDivs $ Proposal
   <*> areq boolField "Make your authorship public" publicly
   <*> areq textareaField "Description" description
   
-postNewProposalR issueId = fst $ newEntryR ProposalR $ do
+postNewProposalR issueId = snd $ newEntryR ProposalR $ do
    userId <- entityKey <$> requireAuth
    issue <- runDB $ get404 issueId
    when (issueStatus issue /= Draft) $ 
@@ -38,7 +38,7 @@ getProposalR proposalId = do
               $if showAuthor
                  <li> created by 
                       <a href=@{UserR authorId}> #{userName author}
-              <li>
+              <li> adresses
                  <a href=@{IssueR addresses}> #{issueName issue} 
            #{description}
            $if canUpdate

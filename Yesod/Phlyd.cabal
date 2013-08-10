@@ -27,6 +27,7 @@ library
                      Handler.Delegs
                      Handler.Issue
                      Handler.Proposal
+                     Handler.Vote
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT
