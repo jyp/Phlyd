@@ -49,6 +49,7 @@ getProposalR proposalId = do
                  <input type=submit>               
     |]
 
+
 postProposalR :: ProposalId -> Handler Html
 postProposalR = postEntryR ProposalR $ \proposalId -> do
   user <- requireAuthId

@@ -11,3 +11,7 @@ data IssueStatus = Draft | Frozen | VoteOngoing | Closed
      deriving (Show, Read, Eq, Ord)
 derivePersistField "IssueStatus"
 
+data Rank = StrongReject | Reject | WeakReject | Borderline | WeakAccept | Accept | StrongAccept
+     deriving (Show, Read, Eq, Ord, Enum)
+derivePersistField "Rank"
+

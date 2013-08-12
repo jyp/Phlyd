@@ -55,8 +55,7 @@ Delegate
 Vote 
      user UserId
      proposal ProposalId
-     publicly Bool
-     rank Int
+     rank Rank
      UniqueVote user proposal
 
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)
