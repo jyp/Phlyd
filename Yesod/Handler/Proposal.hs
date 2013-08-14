@@ -3,6 +3,7 @@ module Handler.Proposal where
 import Types
 import Import
 import Handler.Helpers
+import Handler.Vote
 
 proposalForm name author addresses publicly description = renderDivs $ Proposal
   <$> areq textField "Name" name
@@ -20,11 +21,13 @@ postNewProposalR issueId = snd $ newEntryR ProposalR $ do
 
 getProposalR :: ProposalId -> Handler Html
 getProposalR proposalId = do
-  userId <- entityKey <$> requireAuth
+  userId <- requireAuthId
   (Proposal name authorId addresses publicly description) <- runDB $ get404 proposalId
   issue <- runDB $ get404 addresses
   author <- runDB $ get404 authorId
+  rank <- runDB $ ((voteRank . entityVal) <$>) <$> getBy (UniqueVote userId proposalId)
   (form,_) <- generateFormPost $ proposalForm (Just name) userId addresses (Just publicly) (Just description)
+  (voteWidget,_) <- generateFormPost $ voteForm userId proposalId rank
   let showAuthor = publicly || authorId == userId
       canUpdate = issueStatus issue == Draft && authorId == userId
   defaultLayout [whamlet|
@@ -40,10 +43,17 @@ getProposalR proposalId = do
                       <a href=@{UserR authorId}> #{userName author}
               <li> adresses
                  <a href=@{IssueR addresses}> #{issueName issue} 
+           Proposal description:
            #{description}
+           <h2> Cast vote
+               <form method=post action=@{VoteR proposalId}>
+                 ^{voteWidget}
+               <div>
+                 <input type=submit>               
+
            $if canUpdate
-             <h2> Update Issue
-               <form method=post>
+             <h2> Update proposal
+               <form method=post action=@{ProposalR proposalId}>
                  ^{form}
                <div>
                  <input type=submit>               

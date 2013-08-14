@@ -20,5 +20,5 @@
 /new/proposal/#IssueId NewProposalR POST
 /proposal/#ProposalId ProposalR GET POST
 
-/new/vote/#ProposalId NewVoteR POST
-/vote/#VoteId VoteR GET POST
+/vote/#ProposalId VoteR GET POST
+
